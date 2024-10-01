@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace = "com.example.crossfittimer"
+    namespace = "io.github.openwodtimer"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.example.crossfittimer"
+        applicationId = "io.github.openwodtimer"
         minSdk = 24
         targetSdk = 34
         versionCode = 1
