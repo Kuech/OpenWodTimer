@@ -16,6 +16,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -165,7 +166,7 @@ fun TimerMenu(
 }
 
 @Composable
-fun RoundsInputTextFields(
+fun RoundInputNumberPicker(
     onRoundsValueChange: (rounds:Int) -> Unit,
     defaultRoundsValueInt:Int,
     labelString: String
@@ -183,9 +184,9 @@ fun RoundsInputTextFields(
                 onRoundsValueChange(value)
             },
             range = 1..999,
-            dividersColor = Color.White, //Temp for dark mode
+            dividersColor = MaterialTheme.colorScheme.primary, //Temp for dark mode
             textStyle = TextStyle(
-                color = Color.White
+                color = MaterialTheme.colorScheme.primary
             )
         )
         Spacer(modifier = Modifier.width(8.dp))
@@ -194,13 +195,13 @@ fun RoundsInputTextFields(
 }
 
 @Composable
-fun TimeInputTextFields(
-    onTimeInLongChange: (TimeLong:Long) -> Unit,
+fun TimeInputNumberPicker(
+    onTimeInLongChange: (timeLong:Long) -> Unit,
     defaultMinuteValueInt:Int,
     defaultSecondsValueInt:Int,
     labelString:String){
-    var minutes:Int by remember { mutableStateOf(defaultMinuteValueInt) }
-    var seconds:Int by remember { mutableStateOf(defaultSecondsValueInt) }
+    var minutes:Int by remember { mutableIntStateOf(defaultMinuteValueInt) }
+    var seconds:Int by remember { mutableIntStateOf(defaultSecondsValueInt) }
 
     Row(modifier = Modifier.padding(16.dp),
         verticalAlignment = Alignment.CenterVertically){
@@ -213,9 +214,9 @@ fun TimeInputTextFields(
                 onTimeInLongChange((minutes*60000+seconds*1000).toLong())
             },
             range = 0..59,
-            dividersColor = Color.White, //Temp for dark mode
+            dividersColor = MaterialTheme.colorScheme.primary, //Temp for dark mode
             textStyle = TextStyle(
-                color = Color.White
+                color = MaterialTheme.colorScheme.primary
             )
         )
         Spacer(modifier = Modifier.width(8.dp))
@@ -228,9 +229,9 @@ fun TimeInputTextFields(
                 onTimeInLongChange((minutes*60000+seconds*1000).toLong())
             },
             range = 0..59,
-            dividersColor = Color.White, //Temp for dark mode
+            dividersColor = MaterialTheme.colorScheme.primary, //Temp for dark mode
             textStyle = TextStyle(
-                color = Color.White
+                color = MaterialTheme.colorScheme.primary
             )
         )
     }
@@ -243,7 +244,7 @@ fun SimpleWorkoutOption(
     defaultSecondInt: Int,
     labelString: String,
     returnValue: (workCountdownLong:Long) -> Unit){
-    TimeInputTextFields(
+    TimeInputNumberPicker(
         defaultMinuteValueInt = defaultMinuteInt,
         defaultSecondsValueInt = defaultSecondInt,
         labelString = labelString,
@@ -262,7 +263,7 @@ fun MultiRoundWorkoutOption(
     defaultRoundsInt: Int,
     returnValue: (wodTimerParam: WodTimerParam) -> Unit){
     val outWodTimerParam:WodTimerParam by remember { mutableStateOf(WodTimerParam(0,0)) }
-    TimeInputTextFields(
+    TimeInputNumberPicker(
         defaultMinuteValueInt = defaultWorkMinuteInt,
         defaultSecondsValueInt = defaultWorkSecondsInt,
         labelString = "Work For",
@@ -271,7 +272,7 @@ fun MultiRoundWorkoutOption(
             returnValue(outWodTimerParam)
         }
     )
-    TimeInputTextFields(
+    TimeInputNumberPicker(
         defaultMinuteValueInt = defaultRestMinuteInt,
         defaultSecondsValueInt = defaultRestSecondsInt,
         labelString = "Rest For",
@@ -280,7 +281,7 @@ fun MultiRoundWorkoutOption(
             returnValue(outWodTimerParam)
         }
     )
-    RoundsInputTextFields(
+    RoundInputNumberPicker(
         onRoundsValueChange = { rounds: Int ->
             outWodTimerParam.rounds = rounds
             returnValue(outWodTimerParam)
@@ -299,7 +300,15 @@ data class WodTimerParam(
 
 @Preview(showBackground = true, backgroundColor = android.graphics.Color.DKGRAY.toLong())
 @Composable
-fun PrintCurrentTimePreview() {
+fun PrintCurrentTimePreviewDarkMode() {
+    CrossfitTimerTheme(darkTheme = true, dynamicColor = true) {
+        TimerMenu(defaultWorkoutType = WorkoutType.EMOM)
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun PrintCurrentTimePreviewLightMode() {
     CrossfitTimerTheme(darkTheme = true, dynamicColor = true) {
         TimerMenu(defaultWorkoutType = WorkoutType.EMOM)
     }

@@ -15,7 +15,7 @@ class MultiRoundWodTimer(
     )
 
     override fun start(){
-        setNewRound(wodTimerData.rounds)
+        setNewRound(wodTimerData.currentRound)
         startCountDownTimer(currentRemainingTime+1000)
     }
 
@@ -23,7 +23,7 @@ class MultiRoundWodTimer(
         if(rounds==0){
             stop()
         }else{
-            wodTimerData.workoutState = nextWorkoutState()
+            wodTimerData.currentWorkoutState = nextWorkoutState()
             start()
         }
     }
@@ -47,7 +47,7 @@ class MultiRoundWodTimer(
 
     private fun nextRound(){
         rounds--
-        wodTimerData.rounds++
+        wodTimerData.currentRound++
     }
 }
 

@@ -25,7 +25,7 @@ open class WodTimer(
 
     override fun pause(){
         if(!paused){
-            wodTimerData.remainingTime -= (wodTimerData.remainingTime % 1000)
+            wodTimerData.remainingTimeInMilliSeconds -= (wodTimerData.remainingTimeInMilliSeconds % 1000)
             countDownTimer?.cancel()
             setPaused(true)
         }
@@ -33,7 +33,7 @@ open class WodTimer(
 
     override fun resume(){
         if(paused){
-            startCountDownTimer(wodTimerData.remainingTime)
+            startCountDownTimer(wodTimerData.remainingTimeInMilliSeconds)
             setPaused(false)
         }
     }
@@ -51,9 +51,9 @@ open class WodTimer(
     internal fun startCountDownTimer(timeRemaining:Long){
         countDownTimer = object : CountDownTimer(timeRemaining, 1000) {
             override fun onTick(millisUntilFinished: Long) {
-                wodTimerData.remainingTime = millisUntilFinished-500
-                wodTimerData.elapsedTime = (currentRemainingTime - millisUntilFinished)
-                onTickListener?.onTick(wodTimerData.remainingTime, wodTimerData.elapsedTime)
+                wodTimerData.remainingTimeInMilliSeconds = millisUntilFinished-500
+                wodTimerData.elapsedTimeInMilliSeconds = (currentRemainingTime - millisUntilFinished+1000)
+                onTickListener?.onTick(wodTimerData.remainingTimeInMilliSeconds, wodTimerData.elapsedTimeInMilliSeconds)
             }
             override fun onFinish() {
                 countDownFinished()
@@ -79,18 +79,18 @@ open class WodTimer(
 
 
     internal open fun countDownFinished(){
-        if(wodTimerData.workoutState==WorkoutState.WORK){
+        if(wodTimerData.currentWorkoutState==WorkoutState.WORK){
             stop()
         }else{
-            wodTimerData.workoutState = WorkoutState.WORK
+            wodTimerData.currentWorkoutState = WorkoutState.WORK
             setNewRound(0)
             start()
         }
     }
 
     internal fun setNewRound(currentNewRound: Int){
-        currentRemainingTime = workoutStateSetMap[wodTimerData.workoutState]!!
-        this.onNewRoundListener?.onNewRound(currentNewRound, wodTimerData.workoutState, currentRemainingTime)
+        currentRemainingTime = workoutStateSetMap[wodTimerData.currentWorkoutState]!!
+        this.onNewRoundListener?.onNewRound(currentNewRound, wodTimerData.currentWorkoutState, currentRemainingTime)
     }
 
     internal fun endWorkout(){

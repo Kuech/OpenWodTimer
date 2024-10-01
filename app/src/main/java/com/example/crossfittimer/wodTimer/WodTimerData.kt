@@ -1,8 +1,8 @@
 package com.example.crossfittimer.wodTimer
 
 data class WodTimerData(
-    var remainingTime: Long =0,
-    var elapsedTime: Long =0,
-    var workoutState: WorkoutState = WorkoutState.PRECOUNTDOWN,
-    var rounds: Int = 0,
+    var remainingTimeInMilliSeconds: Long =0,
+    var elapsedTimeInMilliSeconds: Long =0,
+    var currentWorkoutState: WorkoutState = WorkoutState.PRECOUNTDOWN,
+    var currentRound: Int = 0,
 )
